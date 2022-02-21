@@ -1,31 +1,68 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SearchMovie } from "./SearchMovie";
 import { MovieCard } from "./MovieCard";
+import { Context, SearchContext } from "../hooks/useContext";
+import { getMovies } from "../helpers/Fetch";
 
 export const ListMoviesScreen = () => {
-  const [movies, setMovies] = useState([{
-      id: 1,
-      titulo: 'Uncharted: Fuera del mapa',
-      año: 2020,
-      tipo: 'Serie',
-      img: 'https://archivos-cms.cinecolombia.com/images/_aliases/poster_card/4/8/4/4/24484-1-esl-CO/a59100e0218d-unch-2-poster.jpg' 
-  }]);
+  //context
+  const { resultado } = useContext(Context);
+  const { setMovies }: any = useContext(Context);
+  const { filter, setFilter }: any = useContext(SearchContext);
+  //useState page
+  const [page, setPage] = useState(1);
+  //Pagination
+  const pageLimited = resultado?.totalPage;
+  const pageLimitedReal = pageLimited ? Math.ceil(pageLimited) : 1;
 
+  //increment page
+  const handleNextPage = () => {
+    if (page < pageLimitedReal) {
+      setPage((value) => value + 1);
+    }
+  };
+  //decrement page
+  const handlePreviewPage = () => {
+    if (page > 1) {
+      setPage((value) => value - 1);
+    }
+  };
 
+  //Effects secondary get data
+  useEffect(() => {
+    getMovies(filter.title, filter.year, filter.type, page).then((movies) => {
+      setMovies(movies);
+    });
+  }, [filter.title, filter.year, filter.type, setMovies, page]);
+
+  //Effects secondary set filter with page
+  useEffect(() => {
+    setFilter({ ...filter, page });
+  }, [page, setFilter]);
 
   return (
     <>
-      <h1>List movies</h1>
-      <SearchMovie
-        // setMovies={setMovies} 
-    />
+      <h1 className="listMovies__title">List movies</h1>
+      <SearchMovie />
       <hr />
-
-      <ol>
-        {movies.map((movie) => (
-          <MovieCard movie={movie} key={movie.id} />
+      <section className="movieCard-container">
+        {resultado?.Search?.map((movie) => (
+          <MovieCard movie={movie} key={`${movie.imdbID}${Date.now()}`} />
         ))}
-      </ol>
+      </section>
+      <div className="ListMovies__boxButton">
+        <button
+          onClick={handlePreviewPage}
+          className="ListMovies__button"
+          disabled={page <= 1}
+        >
+          Preview page
+        </button>
+        <button onClick={handleNextPage} className="ListMovies__button">
+          {" "}
+          Next page{" "}
+        </button>
+      </div>
     </>
   );
 };
