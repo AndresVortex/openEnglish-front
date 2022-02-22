@@ -1,26 +1,17 @@
 import { Response, Resultado } from '../interface/response';
 
-export const getMovies = async (title: string, year: number, type: 'movie' | 'series' | 'episode', page?: number) => {
+const baseUrl = 'http://localhost:3000'
+const fetchMovies = (endpoint: string, data?: any, method = 'GET') => {
 
-    const url = `http://localhost:3000/movies?title=${title}&year=${year}&type=${type}&page=${page}`
-    
-    try {
-        
-        const resp = await fetch(url)
+    const url = `${baseUrl}/${endpoint}`
 
-        let { exitoso, resultado }: Response = await resp.json()
-        
-        if (exitoso) {
-            
+    if (method === 'GET') {
+        return fetch(url);
 
-            return resultado
-        } else {
-            return []
-        }
-
-    } catch (error: any) {
-        console.log(error)
+    }else {
+        return fetch(url, {method, headers: {'Content-type': 'application/json'}, body: JSON.stringify(data)})
     }
 
 }
 
+export {fetchMovies}

@@ -27,3 +27,11 @@ export interface Search {
 export enum Type {
     Movie = "movie",
 }
+
+
+export interface Filter {
+    title: string,
+    year?: number,
+    type?: string,
+    page?: number 
+}

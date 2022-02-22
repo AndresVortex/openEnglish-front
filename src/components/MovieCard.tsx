@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { getMovies } from "../helpers/Fetch";
-import { Context } from "../hooks/useContext";
+
+
 import { Search } from '../interface/response';
 
 interface props {

@@ -1,18 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SearchMovie } from "./SearchMovie";
 import { MovieCard } from "./MovieCard";
-import { Context, SearchContext } from "../hooks/useContext";
-import { getMovies } from "../helpers/Fetch";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getMovies } from '../actions/moviesAction';
+import { RootState } from '../store/store';
+
 
 export const ListMoviesScreen = () => {
-  //context
-  const { resultado } = useContext(Context);
-  const { setMovies }: any = useContext(Context);
-  const { filter, setFilter }: any = useContext(SearchContext);
+ 
+  const dispatch = useDispatch()
+
+  const {title, page2, type, year} = useSelector((state:RootState) => state.filter)
   //useState page
   const [page, setPage] = useState(1);
+
+
+  const {movies, totalPage} = useSelector((state:RootState) => state.movies)
   //Pagination
-  const pageLimited = resultado?.totalPage;
+  const pageLimited = totalPage;
   const pageLimitedReal = pageLimited ? Math.ceil(pageLimited) : 1;
 
   //increment page
@@ -27,18 +33,19 @@ export const ListMoviesScreen = () => {
       setPage((value) => value - 1);
     }
   };
-
+  
   //Effects secondary get data
   useEffect(() => {
-    getMovies(filter.title, filter.year, filter.type, page).then((movies) => {
-      setMovies(movies);
-    });
-  }, [filter.title, filter.year, filter.type, setMovies, page]);
+    if(title.trim().length > 3){
+      dispatch(getMovies(title, year, type, page ))
+
+    }
+  }, [title, year, type, page, dispatch])
+  
+ 
 
   //Effects secondary set filter with page
-  useEffect(() => {
-    setFilter({ ...filter, page });
-  }, [page, setFilter]);
+
 
   return (
     <>
@@ -46,8 +53,8 @@ export const ListMoviesScreen = () => {
       <SearchMovie />
       <hr />
       <section className="movieCard-container">
-        {resultado?.Search?.map((movie) => (
-          <MovieCard movie={movie} key={`${movie.imdbID}${Date.now()}`} />
+        {movies.map((movie: any, index: number) => (
+          <MovieCard movie={movie} key={`${movie.imdbID}${index}`} />
         ))}
       </section>
       <div className="ListMovies__boxButton">

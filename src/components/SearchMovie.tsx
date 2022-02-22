@@ -7,27 +7,33 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "../hooks/useForm";
-import { getMovies } from "../helpers/Fetch";
 import { Resultado } from "../interface/response";
-import { Context, SearchContext } from "../hooks/useContext";
+import { setFilter } from '../actions/filterAction';
+import { RootState } from '../store/store';
+import { getMovies } from '../actions/moviesAction';
+
 
 interface props {
   setMovies: Dispatch<SetStateAction<string[]>>;
 }
 
 export const SearchMovie = () => {
-  const { setMovies }: any = useContext(Context);
-  const { filter, setFilter }: any = useContext(SearchContext);
+
+  const dispatch = useDispatch()
+
+  const {title: title2, page, type: type2, year: year2} = useSelector((state:RootState) => state.filter)
+
 
   const [form, handleInputChange] = useForm({
-    title: filter.title,
-    type: filter.type,
-    year: filter.year,
-    page: filter.page,
+    title: title2,
+    type: type2,
+    year: year2,
+    page: page,
   });
 
-  const { title, type, year, page } = form;
+  const { title, type, year } = form;
 
   const [inputValue, setInputValue] = useState<string>("");
 
@@ -38,16 +44,14 @@ export const SearchMovie = () => {
       setInputValue("");
     }
   };
+  useEffect(() => {
+    dispatch(setFilter({title,type,year}))
+    if(title.trim().length > 3){
 
-  useEffect(() => {
-    getMovies(title, year, type, page).then((movies) => {
-      setMovies(movies);
-    });
-  }, [title, year, type, setMovies, page]);
-  useEffect(() => {
-    setFilter(form);
-  }, [form, setFilter]);
-  
+      dispatch(getMovies(title, year, type))
+    }
+  }, [dispatch, title, type, year])
+ 
 
 
   
@@ -63,7 +67,7 @@ export const SearchMovie = () => {
           name="title"
           value={title}
           onChange={handleInputChange}
-          placeholder="Camila"
+          placeholder=""
         />
       </div>
       <div className="searchMovie__boxInput">
@@ -88,6 +92,7 @@ export const SearchMovie = () => {
           className="searchMovie__select"
           name="type"
           id=""
+          value={type}
           onChange={handleInputChange}
         >
           <option value=""> Select option </option>
