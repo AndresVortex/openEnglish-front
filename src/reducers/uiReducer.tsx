@@ -4,6 +4,7 @@ const initialState = {
     message: '',
     error: false,
     loading: false,
+    firsTime: true
     
 }
 
