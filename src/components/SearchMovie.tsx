@@ -47,10 +47,10 @@ export const SearchMovie = () => {
   useEffect(() => {
     dispatch(setFilter({title,type,year}))
     if(title.trim().length > 3){
-
-      dispatch(getMovies(title, year, type))
+      
+      dispatch(getMovies(title, year, type, page))
     }
-  }, [dispatch, title, type, year])
+  }, [dispatch, title, type, year, page])
  
 
 

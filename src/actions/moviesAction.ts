@@ -4,6 +4,7 @@ import { types } from '../types/types';
 import { Response, Search, Resultado } from '../interface/response';
 import { setMessage, loading, loaded } from './uiActions';
 import Swal from 'sweetalert2';
+import { setFilter } from './filterAction';
 
 export const getMovies = (title: string, year?: number, type?: 'movie' | 'series' | 'episode', page?: number) => async (dispatch: AppDispatch) => {
 
@@ -23,6 +24,7 @@ export const getMovies = (title: string, year?: number, type?: 'movie' | 'series
             dispatch(setMovies({totalPage, Search}))
 
             dispatch(loaded())
+            
         } else {
             dispatch(setMessage(mensaje))
             dispatch(loaded())
