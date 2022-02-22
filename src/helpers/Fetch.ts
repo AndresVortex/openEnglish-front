@@ -1,6 +1,6 @@
 import { Response, Resultado } from '../interface/response';
 
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'http://localhost:3001'
 const fetchMovies = (endpoint: string, data?: any, method = 'GET') => {
 
     const url = `${baseUrl}/${endpoint}`

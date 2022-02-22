@@ -4,7 +4,7 @@ const initialState = {
     message: '',
     error: false,
     loading: false,
-    firsTime: true
+    firstTime: true
     
 }
 
@@ -31,6 +31,11 @@ export const uiReducer = (state= initialState, action: {type: string, payload?: 
                 ...state,
                 error: action.payload
             }
+        case types.changeFirsTime: 
+        return {
+            ...state,
+            firstTime: false
+        }
         default:
             return state;
     }

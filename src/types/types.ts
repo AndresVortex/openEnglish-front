@@ -9,6 +9,7 @@ export const types = {
     loading: '[UI] Loading',
     loaded: '[UI] loaded',
     setError: '[UI] set error',
+    changeFirsTime: '[IU] change first time', 
 
     //filter
     setFilter: '[filter] set filter'

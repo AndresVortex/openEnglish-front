@@ -5,11 +5,25 @@ import { MovieCard } from "./MovieCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getMovies } from '../actions/moviesAction';
 import { RootState } from '../store/store';
+import { searchMoviesTypes } from '../actions/uiActions';
 
 
 export const ListMoviesScreen = () => {
  
   const dispatch = useDispatch()
+
+
+  const {firstTime} =useSelector((state:RootState) => state.ui)
+
+  useEffect(() => {
+      if(firstTime){
+        dispatch(searchMoviesTypes())
+        console.log('se ejecuta endpoint de base de datos');
+      }
+  }, [firstTime, dispatch])
+
+
+
 
   const {title, page2, type, year} = useSelector((state:RootState) => state.filter)
   //useState page
