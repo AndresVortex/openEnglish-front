@@ -16,8 +16,8 @@ export const setError = (error: boolean) => ({ type: types.setError, payload: er
 export const searchMoviesTypes = () => async(dispatch: AppDispatch) => {
 
     try {
-        const url = 'movies/t'
-        const resp = await fetchMovies(url)
+        const url = ''
+        const resp = await fetchMovies(url, {}, 'POST')
         const {resultado} = await resp.json()
 
         if (resultado) {
