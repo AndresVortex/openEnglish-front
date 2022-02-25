@@ -1,8 +1,8 @@
 import { types } from "../types/types";
 
 const initialState = {
-  title: "Love",
-  year: 2020,
+  title: "",
+  year: 0,
   type: 0,
   page: 1,
   typesMovies: []

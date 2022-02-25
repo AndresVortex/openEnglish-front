@@ -3,34 +3,29 @@ import { SearchMovie } from "./SearchMovie";
 import { MovieCard } from "./MovieCard";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getMovies } from '../actions/moviesAction';
-import { RootState } from '../store/store';
-import { searchMoviesTypes } from '../actions/uiActions';
-
+import { getMovies } from "../actions/moviesAction";
+import { RootState } from "../store/store";
+import { searchMoviesTypes } from "../actions/uiActions";
 
 export const ListMoviesScreen = () => {
- 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-
-  const {firstTime} =useSelector((state:RootState) => state.ui)
+  const { firstTime } = useSelector((state: RootState) => state.ui);
 
   useEffect(() => {
-      if(firstTime){
-        dispatch(searchMoviesTypes())
-        console.log('se ejecuta endpoint de base de datos');
-      }
-  }, [firstTime, dispatch])
+    if (firstTime) {
+      dispatch(searchMoviesTypes());
+      console.log("se ejecuta endpoint de base de datos");
+    }
+  }, [firstTime, dispatch]);
 
-
-
-
-  const {title, page2, type, year} = useSelector((state:RootState) => state.filter)
+  const { title, page2, type, year } = useSelector(
+    (state: RootState) => state.filter
+  );
   //useState page
   const [page, setPage] = useState(1);
 
-
-  const {movies, totalPage} = useSelector((state:RootState) => state.movies)
+  const { movies, totalPage } = useSelector((state: RootState) => state.movies);
   //Pagination
   const pageLimited = totalPage;
   const pageLimitedReal = pageLimited ? Math.ceil(pageLimited) : 1;
@@ -47,19 +42,13 @@ export const ListMoviesScreen = () => {
       setPage((value) => value - 1);
     }
   };
-  
+
   //Effects secondary get data
   useEffect(() => {
-    if(title.trim().length > 3){
-      dispatch(getMovies(title, year, type, page ))
-
-    }
-  }, [title, year, type, page, dispatch])
-  
- 
+    dispatch(getMovies(title, year, type, page));
+  }, [title, year, type, page, dispatch]);
 
   //Effects secondary set filter with page
-
 
   return (
     <>
