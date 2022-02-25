@@ -3,8 +3,9 @@ import { types } from "../types/types";
 const initialState = {
   title: "Love",
   year: 2020,
-  type: "",
+  type: 0,
   page: 1,
+  typesMovies: []
 };
 
 export const filterReducer = (
@@ -17,7 +18,11 @@ export const filterReducer = (
         ...state,
         ...action.payload
       };
-
+    case types.setTypesMovies: 
+      return {
+        ...state,
+        typesMovies: action.payload
+      }
     default:
       return state;
   }

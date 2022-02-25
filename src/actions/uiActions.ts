@@ -13,10 +13,10 @@ export const loaded = () => ({ type: types.loaded })
 export const setError = (error: boolean) => ({ type: types.setError, payload: error })
 
 
-export const searchMoviesTypes = () => async(dispatch: AppDispatch) => {
+export const fillDatabase = () => async(dispatch: AppDispatch) => {
 
     try {
-        const url = ''
+        const url = 'movies'
         const resp = await fetchMovies(url, {}, 'POST')
         const {resultado} = await resp.json()
 
@@ -31,5 +31,26 @@ export const searchMoviesTypes = () => async(dispatch: AppDispatch) => {
     }
 }
 
+export const searchMoviesTypes = () => async(dispatch: AppDispatch) => {
+
+    try {
+        const url = 'movies/t'
+        const resp = await fetchMovies(url)
+        const {resultado, mensaje } = await resp.json()
+
+        if (resultado) {
+            dispatch(setTypesMovies(resultado))
+        }else {
+            dispatch(setError(true))
+            dispatch(setMessage(mensaje))
+        }
+        
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const setTypesMovies = (typesMovies: any) => ({type: types.setTypesMovies, payload: typesMovies})
 
 const changeFirstTime = () => ({type: types.changeFirsTime})

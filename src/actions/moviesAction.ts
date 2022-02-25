@@ -6,8 +6,8 @@ import { setMessage, loading, loaded } from './uiActions';
 import Swal from 'sweetalert2';
 import { setFilter } from './filterAction';
 
-export const getMovies = (title: string, year?: number, type?: 'movie' | 'series' | 'episode', page?: number) => async (dispatch: AppDispatch) => {
-
+export const getMovies = (title: string, year?: number, type?: number, page?: number) => async (dispatch: AppDispatch) => {
+    
     let url = `movies?title=${title}${year ? `&year=${year}` : ''}${type ? `&type=${type}` : ''}${page ? `&page=${page}` : '&page=1'}`
     
     try {
@@ -16,12 +16,12 @@ export const getMovies = (title: string, year?: number, type?: 'movie' | 'series
         const resp = await fetchMovies(url)
         const { exitoso, resultado, mensaje }: Response = await resp.json()
 
-
+      
 
         if (exitoso) {
-
-            const {totalPage, Search} = resultado
-            dispatch(setMovies({totalPage, Search}))
+            const { consulta, totalPage} = resultado
+            
+            dispatch(setMovies(consulta, totalPage))
 
             dispatch(loaded())
             
@@ -41,5 +41,5 @@ export const getMovies = (title: string, year?: number, type?: 'movie' | 'series
 }
 
 
-const setMovies = (movies: Resultado) => ({ type: types.setMovies, payload: movies })
+const setMovies = (movies: Search[], totalPage: number ) => ({ type: types.setMovies, payload: {movies, totalPage} })
 

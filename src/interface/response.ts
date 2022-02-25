@@ -8,20 +8,26 @@ export interface Response {
 }
 
 export interface Resultado {
-    Search:        Search[];
+    consulta:        Search[];
     totalResults?:  string;
     Response?:      string;
     exitoso?:       boolean;
     elementInPage?: number;
-    totalPage?:     number;
+    totalPage:     number;
 }
 
 export interface Search {
+    movie_id: number;
+    movieType_id: number;
     Title:  string;
     Year:   string;
     imdbID: string;
     Type:   Type;
     Poster: string;
+    moviesType: {
+        
+        movieType: string
+    }
 }
 
 export enum Type {

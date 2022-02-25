@@ -13,6 +13,7 @@ import { Resultado } from "../interface/response";
 import { setFilter } from '../actions/filterAction';
 import { RootState } from '../store/store';
 import { getMovies } from '../actions/moviesAction';
+import { fillDatabase, searchMoviesTypes } from '../actions/uiActions';
 
 
 interface props {
@@ -21,9 +22,13 @@ interface props {
 
 export const SearchMovie = () => {
 
+  //useDispatch for dispatch action 
   const dispatch = useDispatch()
 
-  const {title: title2, page, type: type2, year: year2} = useSelector((state:RootState) => state.filter)
+
+
+
+  const {title: title2, page, type: type2, year: year2, typesMovies} = useSelector((state:RootState) => state.filter)
 
 
   const [form, handleInputChange] = useForm({
@@ -44,17 +49,24 @@ export const SearchMovie = () => {
       setInputValue("");
     }
   };
+
+  const handleUpdateDb = () => {
+    dispatch(fillDatabase())
+    console.log('Actualizando database');
+  }
   useEffect(() => {
     dispatch(setFilter({title,type,year}))
+
     if(title.trim().length > 3){
       
-      dispatch(getMovies(title, year, type, page))
+      dispatch(getMovies(title, year, parseInt(type), page))
     }
   }, [dispatch, title, type, year, page])
  
+  useEffect(()=> {
+    dispatch(searchMoviesTypes())
+  }, [dispatch])
 
-
-  
   return (
     <form className="searchMovie" onSubmit={handleSubmit}>
       <div className="searchMovie__boxInput">
@@ -95,11 +107,21 @@ export const SearchMovie = () => {
           value={type}
           onChange={handleInputChange}
         >
-          <option value=""> Select option </option>
-          <option value="movie">Movie</option>
-          <option value="series">Series</option>
-          <option value="episode">Episodes</option>
+          <option value={undefined}> Select option </option>
+          {
+            typesMovies.map((type:any) => (
+              <option key={type.movieType_id} value={type.movieType_id}> {type.movieType} </option>
+
+            ))
+          }
+          
         </select>
+      </div>
+      <div className="searchMovie__boxInput">
+        <button className="searchMovie__button" onClick={handleUpdateDb}>
+          Actualizar db
+        </button>
+
       </div>
     </form>
   );

@@ -11,7 +11,7 @@ export const moviesReducer = (state= initialState, action: {type: string, payloa
         case types.setMovies:
             return {
                 ...state,
-                movies: action.payload.Search,
+                movies: action.payload.movies,
                 totalPage: action.payload.totalPage
             }
     

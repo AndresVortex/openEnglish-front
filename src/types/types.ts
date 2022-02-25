@@ -10,6 +10,7 @@ export const types = {
     loaded: '[UI] loaded',
     setError: '[UI] set error',
     changeFirsTime: '[IU] change first time', 
+    setTypesMovies: '[IU] set types movies',
 
     //filter
     setFilter: '[filter] set filter'
